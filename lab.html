@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShieldQuest — Redirecting to Lab</title>
+    <meta http-equiv="refresh" content="0; url=./lab1.html" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var mission = params.get('mission');
+        var map = {
+          'dom-open-redirect': './lab1.html',
+          'prototype-pollution': './lab2.html',
+          'clickjacking-ui-redress': './lab3.html',
+        };
+        window.location.replace(map[mission] || './lab1.html');
+      })();
+    </script>
+  </head>
+  <body>
+    <main class="site-shell" style="align-items: center; justify-content: center; padding: 48px;">
+      <p style="color: #9ba7b0; font-size: 0.95rem;">
+        Opening Helios Juice Shop Lab…
+        <a href="./lab1.html" style="color: #00d4d8; text-decoration: underline;">Continue</a>
+      </p>
+    </main>
+  </body>
+</html>

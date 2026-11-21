@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 1: DOM-Based Open Redirect — ShieldQuest</title>
+    <meta
+      name="description"
+      content="Explore DOM-based open redirect inside the Helios Juice Shop sign-in page as Prof. Noor, Tariq, Zayd, and Kareem."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="header-inner">
+          <a href="./index.html" class="brand-link">
+            <svg
+              class="brand-logo"
+              viewBox="0 0 28 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M14 2.5L23.5 6.3V13.6C23.5 19.3 19.4 23.7 14 25.5C8.6 23.7 4.5 19.3 4.5 13.6V6.3L14 2.5Z"
+                stroke="#00D4D8"
+                stroke-width="1.8"
+                fill="rgba(0, 212, 216, 0.1)"
+              />
+              <path
+                d="M14 8.5L18 11.2V15.4C18 17.9 16.3 19.8 14 20.6C11.7 19.8 10 17.9 10 15.4V11.2L14 8.5Z"
+                fill="#00D4D8"
+              />
+            </svg>
+            <span>ShieldQuest</span>
+          </a>
+
+          <nav class="main-nav main-nav-visible" aria-label="Lab navigation">
+            <a href="./index.html" class="nav-link">Home</a>
+            <a href="./lab1.html" class="nav-link is-active" aria-current="page">
+              01 · Open Redirect
+            </a>
+            <a href="./lab2.html" class="nav-link">02 · Prototype Pollution</a>
+            <a href="./lab3.html" class="nav-link">03 · Clickjacking</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="site-main lab-main">
+        <section class="lab-section">
+          <div class="section-container">
+            <div class="lab-page-banner">
+              <div>
+                <p class="eyebrow">Helios Juice Shop · Lab 01 of 03</p>
+                <h1 id="lab-page-title" class="section-heading">DOM-Based Open Redirect</h1>
+                <p id="lab-page-subtitle" class="section-subcopy">
+                  Target: Sign-in page (<code>?next=</code> query redirect parameter)
+                </p>
+              </div>
+            </div>
+
+            <div class="lab-workbench">
+              <!-- Compact Left Sidebar: Photo + Name + Job Only -->
+              <aside class="player-sidebar" aria-label="Choose player">
+                <div class="sidebar-card sidebar-card-compact">
+                  <p class="eyebrow">Choose Player</p>
+
+                  <div id="player-selector-list" class="player-list" role="tablist"></div>
+
+                  <div class="sidebar-progress-box">
+                    <div class="sidebar-progress-row">
+                      <span>Progress</span>
+                      <strong id="sidebar-completion-count">0 / 4</strong>
+                    </div>
+                    <div class="sidebar-progress-track">
+                      <div id="sidebar-progress-fill" class="sidebar-progress-fill"></div>
+                    </div>
+                    <button type="button" id="reset-progress-btn" class="btn-ghost sidebar-reset-btn">
+                      Reset Progress
+                    </button>
+                  </div>
+                </div>
+              </aside>
+
+              <!-- Right Main Area: Top Split (White Live View + Actions) -> Bottom (Code / Quiz) -->
+              <div class="lab-stage-stack">
+                <div class="lab-top-split is-single-col">
+                  <!-- White-Mode Live View on Top Left -->
+                  <section
+                    class="fake-browser-card fake-browser-light"
+                    aria-label="Live Helios Juice Shop Browser"
+                    hidden
+                  >
+                    <div class="browser-toolbar-top">
+                      <div class="browser-toolbar-title">
+                        <span class="browser-live-dot"></span>
+                        <span>Live View · Helios Juice Shop</span>
+                        <span id="browser-mode-badge" class="browser-mode-badge">Vulnerable</span>
+                      </div>
+                      <div class="browser-toolbar-actions">
+                        <button type="button" id="open-source-btn" class="btn-light-subtle">
+                          &lt;/&gt; Source code
+                        </button>
+                        <button type="button" id="reset-browser-btn" class="btn-light-subtle">
+                          Reset
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="fake-browser-window fake-browser-window-light">
+                      <div class="browser-chrome">
+                        <div class="browser-dots" aria-hidden="true">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </div>
+                      </div>
+
+                      <div class="browser-nav-bar">
+                        <span class="browser-url-label">URL</span>
+                        <div id="browser-address-display" class="browser-address-display"></div>
+                      </div>
+
+                      <form id="browser-custom-form" class="browser-custom-bar" hidden>
+                        <label
+                          for="browser-custom-input"
+                          id="browser-custom-label"
+                          class="custom-label"
+                        >
+                          Your Input
+                        </label>
+                        <input
+                          id="browser-custom-input"
+                          type="text"
+                          class="custom-input-field"
+                          autocomplete="off"
+                        />
+                        <button type="submit" id="browser-custom-run-btn" class="btn-primary btn-xs">
+                          Run
+                        </button>
+                      </form>
+
+                      <div id="fake-browser-viewport" class="fake-browser-viewport"></div>
+
+                      <div class="browser-status-bar">
+                        <span id="browser-status-dot" class="status-dot"></span>
+                        <span id="browser-status-text" class="browser-status-text">
+                          Ready · Waiting for sign-in request
+                        </span>
+                      </div>
+                    </div>
+                  </section>
+
+                  <!-- Beside Live View: Slides / Choices / Payloads / Verification -->
+                  <section
+                    id="role-side-panel"
+                    class="role-workspace-card role-side-panel"
+                    aria-live="polite"
+                  ></section>
+                </div>
+
+                <!-- Under Top Split: Code Inspector & Deep Check / Quiz -->
+                <section id="role-bottom-panel" class="role-bottom-panel"></section>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Source Code Viewer Modal -->
+    <div
+      id="source-modal"
+      class="modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="source-modal-title"
+      hidden
+    >
+      <div class="modal-card source-modal-card">
+        <div class="modal-header">
+          <div>
+            <p class="modal-eyebrow">Helios Juice Shop Inspector</p>
+            <h3 id="source-modal-title" class="modal-title-lg">Page Source Viewer</h3>
+            <p id="source-view-note" class="source-view-note"></p>
+          </div>
+          <button
+            type="button"
+            id="source-close-btn"
+            class="modal-close-btn"
+            aria-label="Close source viewer"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div class="source-tabs" role="tablist" aria-label="Source code tabs">
+          <button type="button" class="filter-btn is-active" data-source-tab="html">HTML</button>
+          <button type="button" class="filter-btn" data-source-tab="js">JavaScript</button>
+        </div>
+
+        <div id="source-code-body" class="source-code-body"></div>
+      </div>
+    </div>
+
+    <script defer src="./lab1.js"></script>
+    <script defer src="./lab-engine.js"></script>
+  </body>
+</html>

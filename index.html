@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShieldQuest — Client-Side Cyber-Security Missions</title>
+    <meta
+      name="description"
+      content="Master client-side security by dissecting DOM-based open redirects, prototype pollution, and clickjacking inside interactive browser missions."
+    />
+    <meta property="og:title" content="ShieldQuest — Client-Side Cyber-Security Missions" />
+    <meta
+      property="og:description"
+      content="Master client-side security by dissecting DOM-based open redirects, prototype pollution, and clickjacking inside interactive browser missions."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <!-- Two-Zone Minimal Top Bar (No Start Play button) -->
+      <header class="site-header">
+        <div class="header-inner">
+          <a href="#top" class="brand-link">
+            <svg
+              class="brand-logo"
+              viewBox="0 0 28 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M14 2.5L23.5 6.3V13.6C23.5 19.3 19.4 23.7 14 25.5C8.6 23.7 4.5 19.3 4.5 13.6V6.3L14 2.5Z"
+                stroke="#00D4D8"
+                stroke-width="1.8"
+                fill="rgba(0, 212, 216, 0.1)"
+              />
+              <path
+                d="M14 8.5L18 11.2V15.4C18 17.9 16.3 19.8 14 20.6C11.7 19.8 10 17.9 10 15.4V11.2L14 8.5Z"
+                fill="#00D4D8"
+              />
+            </svg>
+            <span>ShieldQuest</span>
+          </a>
+
+          <nav class="main-nav main-nav-visible" aria-label="Primary navigation">
+            <a href="#operatives" class="nav-link">Operatives</a>
+            <a href="#vulnerabilities" class="nav-link">Labs</a>
+            <a href="#developers" class="nav-link">Developers</a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="top" class="site-main">
+        <!-- Section 1: 16:9 Hero Illustration + Full-Frame Glossy Glass Box -->
+        <section id="hero-artwork" class="hero-section">
+          <div class="hero-container">
+            <div class="hero-stage">
+              <img
+                id="hero-image"
+                src="./assets/images/hero_dark_hacker_minimal_1795131479061.jpg"
+                alt="16:9 dark minimal cybersecurity hero scene with a very faded night city, a seated man in a hoodie with his back to the camera at glowing hacking monitors, code and data lines, network dots, one-directional neon teal light, and vertical gradient Gaussian blur streaks"
+                referrerpolicy="no-referrer"
+                class="hero-img"
+              />
+
+              <div id="hero-fallback" class="hero-fallback" hidden>
+                <svg
+                  class="hero-fallback-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                </svg>
+                <p class="hero-fallback-title">Hero Illustration Unavailable</p>
+                <p class="hero-fallback-text">
+                  The 16:9 illustration asset could not be loaded in this viewport.
+                </p>
+              </div>
+
+              <!-- Transparent Glossy Glass Box covering nearly the full image, left-aligned -->
+              <div id="hero-overlay" class="hero-overlay hero-overlay-full">
+                <div class="glossy-hero-box glossy-hero-box-full">
+                  <div class="glossy-ribs" aria-hidden="true"></div>
+                  <div class="glossy-top-specular" aria-hidden="true"></div>
+                  <div class="glossy-teal-wash" aria-hidden="true"></div>
+
+                  <div class="glossy-hero-content glossy-hero-content-left">
+                    <div class="hero-box-headline">
+                      <h1 class="hero-brand-title">ShieldQuest</h1>
+                      <p class="hero-brand-summary">
+                        Master client-side web security by dissecting real vulnerabilities inside
+                        hands-on browser missions.
+                      </p>
+                    </div>
+
+                    <div class="hero-actions">
+                      <a href="./lab1.html" class="btn-primary btn-hero">
+                        <span>Start Play</span>
+                        <svg
+                          class="icon-16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" />
+                        </svg>
+                      </a>
+                      <a href="#vulnerabilities" class="btn-glass">Explore Missions</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 2: Minimal Operatives Character Roster -->
+        <section id="operatives" class="operatives-section">
+          <div class="operatives-ambient" aria-hidden="true"></div>
+          <div class="operatives-gridlines" aria-hidden="true"></div>
+
+          <div class="section-container">
+            <div class="operatives-frame">
+              <div class="frame-top-specular" aria-hidden="true"></div>
+
+              <div class="operatives-layout">
+                <!-- Left Featured Full-Body Operative Stage -->
+                <div class="operative-stage">
+                  <div class="operative-stage-glow" aria-hidden="true"></div>
+                  <div class="operative-stage-slash" aria-hidden="true"></div>
+
+                  <div class="operative-full-wrap">
+                    <img
+                      id="active-op-full-img"
+                      src="./assets/images/chars/mentor_full.png"
+                      alt="Noor · Professor"
+                      referrerpolicy="no-referrer"
+                      class="operative-full-img"
+                    />
+                  </div>
+
+                  <div class="operative-nameplate">
+                    <div class="operative-nameplate-row">
+                      <h3 id="active-op-name">Noor · Professor</h3>
+                    </div>
+                    <p id="active-op-role" class="operative-role-text">
+                      Makes the hard parts simple.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Right Panel: Title, Tabs, 4 Slanted Portrait Cards + Role & Weak Point -->
+                <div class="operatives-roster-panel operatives-roster-panel-minimal">
+                  <div class="roster-header">
+                    <div>
+                      <div class="roster-title-row">
+                        <h2 class="roster-title">
+                          OP<span class="accent-letter">E</span>RATIVES
+                        </h2>
+                        <span class="roster-ring" aria-hidden="true"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    id="operative-tabs"
+                    class="operative-tabs"
+                    role="tablist"
+                    aria-label="Select operative specialist"
+                  ></div>
+
+                  <div id="operative-cards" class="operative-cards-grid"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 3: Vulnerabilities File-Folder Glossy Cards (3 Missions Only) -->
+        <section id="vulnerabilities" class="vulnerabilities-section">
+          <div class="vuln-ambient-glow" aria-hidden="true"></div>
+
+          <div class="section-container-narrow">
+            <div class="vuln-header vuln-header-minimal">
+              <div class="vuln-header-copy">
+                <p class="eyebrow">Security Missions</p>
+                <h2 class="section-heading">Core Vulnerabilities</h2>
+              </div>
+            </div>
+
+            <div id="vuln-cards-grid" class="vuln-grid"></div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Section 4: Footer with Larger Centered Developer Team CC Photo & Contact -->
+      <footer id="developers" class="site-footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <div class="footer-brand-row">
+              <svg
+                class="brand-logo"
+                viewBox="0 0 28 28"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M14 2.5L23.5 6.3V13.6C23.5 19.3 19.4 23.7 14 25.5C8.6 23.7 4.5 19.3 4.5 13.6V6.3L14 2.5Z"
+                  stroke="#00D4D8"
+                  stroke-width="1.8"
+                  fill="rgba(0, 212, 216, 0.1)"
+                />
+                <path
+                  d="M14 8.5L18 11.2V15.4C18 17.9 16.3 19.8 14 20.6C11.7 19.8 10 17.9 10 15.4V11.2L14 8.5Z"
+                  fill="#00D4D8"
+                />
+              </svg>
+              <span class="footer-brand-name">ShieldQuest</span>
+            </div>
+            <p class="footer-brand-sub">Client-Side Vulnerability Missions</p>
+          </div>
+
+          <div class="footer-team-center">
+            <div class="footer-team-frame footer-team-frame-lg">
+              <img
+                src="./assets/images/team_cc.jpg"
+                alt="Developer Team 42 — CC"
+                referrerpolicy="no-referrer"
+                class="footer-team-img"
+              />
+              <div class="footer-team-vignette" aria-hidden="true"></div>
+            </div>
+            <p class="footer-team-caption">CC · developer Team 42</p>
+          </div>
+
+          <div class="footer-contact">
+            <p class="footer-contact-title">Developers Contact</p>
+            <a href="mailto:team42@shieldquest.org" class="footer-contact-email">
+              team42@shieldquest.org
+            </a>
+            <button type="button" id="contact-designers-btn" class="btn-subtle footer-contact-btn">
+              Message Team 42
+            </button>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Developers Contact Modal -->
+    <div
+      id="contact-modal"
+      class="modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="contact-modal-title"
+      hidden
+    >
+      <div class="modal-card modal-card-md">
+        <div class="modal-header modal-header-compact">
+          <div>
+            <p class="modal-eyebrow">Developer Team 42</p>
+            <h3 id="contact-modal-title" class="modal-title-md">Contact the Developers</h3>
+          </div>
+          <button
+            type="button"
+            id="contact-close-btn"
+            class="modal-close-btn"
+            aria-label="Close developers contact dialog"
+          >
+            <svg
+              class="icon-16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <form id="contact-form" class="enroll-form" novalidate>
+          <div class="form-field">
+            <label for="contact-email">Your Email</label>
+            <input
+              id="contact-email"
+              type="email"
+              placeholder="you@domain.org"
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="contact-message">Message</label>
+            <textarea
+              id="contact-message"
+              rows="3"
+              placeholder="Feedback, mission ideas, or collaboration inquiry..."
+            ></textarea>
+          </div>
+
+          <p id="contact-error" class="form-error" hidden></p>
+
+          <div class="modal-footer modal-footer-plain">
+            <button type="button" id="contact-cancel-btn" class="btn-ghost">Cancel</button>
+            <button type="submit" class="btn-primary btn-sm">Send Message</button>
+          </div>
+        </form>
+
+        <div id="contact-success" class="enroll-success" hidden>
+          <div class="enroll-success-badge">
+            <svg
+              class="icon-16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+            <span>Message Prepared</span>
+          </div>
+          <p id="contact-success-copy" class="enroll-success-copy"></p>
+          <button type="button" id="contact-done-btn" class="btn-primary btn-full">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <script defer src="./app.js"></script>
+  </body>
+</html>
